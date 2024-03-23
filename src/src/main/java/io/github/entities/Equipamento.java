@@ -9,6 +9,7 @@ public class Equipamento {
     public Equipamento() {
     }
 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public Equipamento(String nome, String patrimonio) {
         this.nome = nome;
         this.patrimonio = patrimonio;
@@ -29,6 +30,6 @@ public class Equipamento {
     public void setPatrimonio(String patrimonio) {
         this.patrimonio = patrimonio;
     }
-    
+     //</editor-fold>
     
 }

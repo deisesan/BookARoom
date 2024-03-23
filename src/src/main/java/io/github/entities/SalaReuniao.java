@@ -1,33 +1,30 @@
 package io.github.entities;
 
 public class SalaReuniao {
-    
-    private int numero;
-    private int wtdLugares;
+
+    private Integer numero;
+    private Integer qtdLugares;
 
     public SalaReuniao() {
+    
     }
-
-    public SalaReuniao(int numero, int wtdLugares) {
-        this.numero = numero;
-        this.wtdLugares = wtdLugares;
-    }
-
-    public int getNumero() {
+ 
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
+    public Integer getNumero() {
         return numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(Integer numero) {
         this.numero = numero;
     }
 
-    public int getWtdLugares() {
-        return wtdLugares;
+    public Integer getQtdLugares() {
+        return qtdLugares;
     }
 
-    public void setWtdLugares(int wtdLugares) {
-        this.wtdLugares = wtdLugares;
+    public void setQtdLugares(Integer qtdLugares) {
+        this.qtdLugares = qtdLugares;
     }
-    
-    
+    //</editor-fold> 
+
 }

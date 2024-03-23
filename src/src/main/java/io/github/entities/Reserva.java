@@ -13,18 +13,11 @@ public class Reserva {
    
    //Atributos das relações
    private SalaReuniao sala;
-   private Funcionario func;
+   private Funcionario funcionario;
    
-   private boolean disponivel;
+   private Boolean ativa;
 
     public Reserva() {
-    }
-
-    public Reserva(LocalDate dataAlocacao, LocalDate horaInicio, LocalDate horaFim, String assunto) {
-        this.dataAlocacao = dataAlocacao;
-        this.horaInicio = horaInicio;
-        this.horaFim = horaFim;
-        this.assunto = assunto;
     }
 
     public LocalDate getDataAlocacao() {
@@ -58,7 +51,31 @@ public class Reserva {
     public void setAssunto(String assunto) {
         this.assunto = assunto;
     }
+
+    public SalaReuniao getSala() {
+        return sala;
+    }
+
+    public void setSala(SalaReuniao sala) {
+        this.sala = sala;
+    }
+
+    public Funcionario getFuncionario() {
+        return funcionario;
+    }
+
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
+    }
+
+    public Boolean getAtiva() {
+        return ativa;
+    }
+
+    public void setAtiva(Boolean ativa) {
+        this.ativa = ativa;
+    }
    
-   
+
    
 }

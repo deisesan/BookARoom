@@ -1,21 +1,21 @@
 package io.github.entities;
 
+import java.util.List;
+
 public class Campus {
-    
+
     private String nome;
-    private String endereco;
-    
+    private Endereco endereco;
+
     //Atributos de Relação
-    private Predio predios;
+    private List<Predio> predios;
+    private List<Equipamento> equipamentos;
+    private List<Funcionario> funcionarios;
 
     public Campus() {
     }
 
-    public Campus(String nome, String endereco) {
-        this.nome = nome;
-        this.endereco = endereco;
-    }
-
+    //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public String getNome() {
         return nome;
     }
@@ -24,13 +24,36 @@ public class Campus {
         this.nome = nome;
     }
 
-    public String getEndereco() {
+    public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(String endereco) {
+    public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
-    
-    
+
+    public List<Predio> getPredios() {
+        return predios;
+    }
+
+    public void setPredios(List<Predio> predios) {
+        this.predios = predios;
+    }
+
+    public List<Equipamento> getEquipamentos() {
+        return equipamentos;
+    }
+
+    public void setEquipamentos(List<Equipamento> equipamentos) {
+        this.equipamentos = equipamentos;
+    }
+
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+    //</editor-fold>
 }
