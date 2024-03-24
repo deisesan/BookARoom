@@ -6,9 +6,14 @@ public class SalaReuniao {
     private Integer qtdLugares;
 
     public SalaReuniao() {
-    
+
     }
- 
+
+    public SalaReuniao(Integer numero, Integer qtdLugares) {
+        this.numero = numero;
+        this.qtdLugares = qtdLugares;
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public Integer getNumero() {
         return numero;
@@ -26,5 +31,10 @@ public class SalaReuniao {
         this.qtdLugares = qtdLugares;
     }
     //</editor-fold> 
+
+    @Override
+    public String toString() {
+        return "SalaReuniao{" + "numero=" + numero + ", qtdLugares=" + qtdLugares + '}';
+    }
 
 }

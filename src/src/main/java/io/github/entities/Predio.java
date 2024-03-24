@@ -13,6 +13,11 @@ public class Predio {
     public Predio() {
     
     }
+
+    public Predio(String nome, List<SalaReuniao> salas) {
+        this.nome = nome;
+        this.salas = salas;
+    }
     
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public String getNome() {

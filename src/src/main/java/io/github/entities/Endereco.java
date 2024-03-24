@@ -14,6 +14,15 @@ public class Endereco {
 
     }
 
+    public Endereco(String rua, String numero, String bairro, String cidade, SiglaEstado siglaEstado) {
+        this.rua = rua;
+        this.numero = numero;
+        this.bairro = bairro;
+        this.cidade = cidade;
+        this.siglaEstado = siglaEstado;
+    }
+    
+
     //<editor-fold defaultstate="collapsed" desc="Getters/Setters">
     public String getRua() {
         return rua;

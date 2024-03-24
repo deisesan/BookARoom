@@ -1,19 +1,15 @@
 package io.github.entities;
 
 public class Funcionario {
-    
+
     private String nome;
     private String cargo;
-    private int ramal;
-    
-    //Atributos de Relação
-    private Campus campuss;
+    private String ramal;
 
     public Funcionario() {
     }
 
-    
-    public Funcionario(String nome, String cargo, int ramal) {
+    public Funcionario(String nome, String cargo, String ramal) {
         this.nome = nome;
         this.cargo = cargo;
         this.ramal = ramal;
@@ -35,13 +31,17 @@ public class Funcionario {
         this.cargo = cargo;
     }
 
-    public int getRamal() {
+    public String getRamal() {
         return ramal;
     }
 
-    public void setRamal(int ramal) {
+    public void setRamal(String ramal) {
         this.ramal = ramal;
     }
-    
-    
+
+    @Override
+    public String toString() {
+        return "Funcionario{" + "nome=" + nome + ", cargo=" + cargo + ", ramal=" + ramal + '}';
+    }
+
 }

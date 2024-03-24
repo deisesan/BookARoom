@@ -1,7 +1,7 @@
 package io.github.entities;
 
 import io.github.entities.Equipamento;
-import io.github.entities.Reserva;
+import io.github.reserva.Reserva;
 
 
 public class EquipamentoReserva {
