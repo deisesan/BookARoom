@@ -18,12 +18,26 @@ public class ConsoleController {
     }
 
     public void iniciar() {
-        System.out.println("#######################################################");
-        System.out.println("##################  Bem Vindo(a)!!!  ##################");
-        this.selecionarCampus();
-        this.menuPrincipal();
-        System.out.println("################  Sessao finalizada.  #################");
-        System.out.println("#######################################################");
+        try {
+            String finalizarSessao = "n";
+            System.out.println("#######################################################");
+            System.out.println("##################  Bem Vindo(a)!!!  ##################");
+            while (true) {
+                if (finalizarSessao.equals("n")) {
+                    this.selecionarCampus();
+                    this.menuPrincipal();
+                } else {
+                    break;
+                }
+                System.out.println("Finalizar sessao? [s/n]");
+                finalizarSessao = this.sc.nextLine();
+            }
+
+            System.out.println("################  Sessao finalizada.  #################");
+            System.out.println("#######################################################");
+        } catch (Exception e) {
+            System.err.println("Ocorreu um erro durante a execução:");
+        }
     }
 
     private void selecionarCampus() {
@@ -32,7 +46,7 @@ public class ConsoleController {
 
         System.out.println("Selecione campus que deseja realizar reserva: ");
         for (Campus campus : campusController.getCampusLista()) {
-            System.out.println("[" + i + "] " + campus.getNome());
+            System.out.println("[ " + i + " ] " + " - " + campus.getNome());
             i++;
         }
 
@@ -49,7 +63,9 @@ public class ConsoleController {
                     break;
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Por favor, informe um numero valido.");
+                this.sc.nextLine();
+                System.out.println("Por favor, informe uma opcao valida.");
+            
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -75,9 +91,9 @@ public class ConsoleController {
 
     private void opcoesMenuPrincipal() {
         System.out.println("Seleciona opcao desejada: ");
-        System.out.println("0 - Sair.");
         System.out.println("1 - Reservar Sala.");
         System.out.println("2 - Visualizar Ocupacao das salas.");
+        System.out.println("0 - Sair de menu principal.");
 
     }
 

@@ -55,9 +55,17 @@ public class DataSource {
         );
 
         List<Predio> prediosLista1 = List.of(
-                new Predio("Prédio 1", salasLista1),
-                new Predio("Prédio 2", salasLista2)
+                new Predio("Predio 1", salasLista1),
+                new Predio("Predio 2", salasLista2)
         );
+
+        for (SalaReuniao sala : salasLista1) {
+            sala.setPredio(prediosLista1.get(0));
+        }
+
+        for (SalaReuniao sala : salasLista2) {
+            sala.setPredio(prediosLista1.get(1));
+        }
 
         List<Funcionario> funcionariosLista1 = List.of(
                 new Funcionario("Walter White", "Professor(a)", "Educação"),
@@ -118,9 +126,17 @@ public class DataSource {
         );
 
         List<Predio> prediosLista2 = List.of(
-                new Predio("Prédio 1", salasLista3),
-                new Predio("Prédio 2", salasLista4)
+                new Predio("Predio 1", salasLista3),
+                new Predio("Predio 2", salasLista4)
         );
+
+        for (SalaReuniao sala : salasLista3) {
+            sala.setPredio(prediosLista2.get(0));
+        }
+
+        for (SalaReuniao sala : salasLista4) {
+            sala.setPredio(prediosLista2.get(1));
+        }
 
         List<Funcionario> funcionariosLista2 = List.of(
                 new Funcionario("Dewey Finn", "Professor(a)", "Educação"),
@@ -136,7 +152,7 @@ public class DataSource {
                 new Equipamento("Notebook Lenovo", "4040"),
                 new Equipamento("Notebook Samsung", "5050")
         );
-        
+
         List<Reserva> reservasLista2 = List.of(
                 new Reserva(LocalDate.of(2024, Month.MARCH, 22), LocalTime.of(11, 00), LocalTime.of(12, 40), "Reuniao", salasLista3.get(0), funcionariosLista2.get(3), null),
                 new Reserva(LocalDate.of(2024, Month.MARCH, 24), LocalTime.of(13, 20), LocalTime.of(15, 00), "Palestra 1", salasLista3.get(0), funcionariosLista2.get(3), null),
@@ -147,7 +163,7 @@ public class DataSource {
                 new Reserva(LocalDate.of(2024, Month.APRIL, 6), LocalTime.of(9, 00), LocalTime.of(10, 50), "Palestra 2", salasLista3.get(1), funcionariosLista2.get(1), null),
                 new Reserva(LocalDate.of(2024, Month.APRIL, 7), LocalTime.of(7, 20), LocalTime.of(9, 00), "Palestra 3", salasLista3.get(2), funcionariosLista2.get(2), null)
         );
-        
+
         Endereco endereco2 = new Endereco("Av. Humberto Mallard", "1355", "Santos Dumont", "Pirapora", SiglaEstado.MG);
 
         Campus campus2 = new Campus("Campus Pirapora", endereco2, prediosLista2, equipamentosLista2, funcionariosLista2, reservasLista2);

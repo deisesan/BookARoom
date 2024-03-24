@@ -4,6 +4,7 @@ public class SalaReuniao {
 
     private Integer numero;
     private Integer qtdLugares;
+    private Predio predio;
 
     public SalaReuniao() {
 
@@ -30,11 +31,19 @@ public class SalaReuniao {
     public void setQtdLugares(Integer qtdLugares) {
         this.qtdLugares = qtdLugares;
     }
+
+    public Predio getPredio() {
+        return predio;
+    }
+
+    public void setPredio(Predio predio) {
+        this.predio = predio;
+    }
     //</editor-fold> 
 
     @Override
     public String toString() {
-        return "SalaReuniao{" + "numero=" + numero + ", qtdLugares=" + qtdLugares + '}';
+        return "SalaReuniao{" + "numero=" + numero + ", qtdLugares=" + qtdLugares + ", predio=" + predio.getNome() + '}';
     }
-
+    
 }
