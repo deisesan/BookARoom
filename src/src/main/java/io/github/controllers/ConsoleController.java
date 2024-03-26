@@ -40,7 +40,7 @@ public class ConsoleController {
             System.out.println("################  Sessao finalizada.  #################");
             System.out.println("#######################################################");
         } catch (Exception e) {
-            System.err.println("Ocorreu um erro durante a execução:");
+            System.out.println("Ocorreu um erro durante a execução:" + e.getLocalizedMessage());
         }
     }
 
@@ -126,10 +126,14 @@ public class ConsoleController {
             dataReserva.setDataAlocacao(LocalDate.parse(dataInput));
             dataReserva.setHoraInicio(LocalTime.parse(horaInicioInput));
             dataReserva.setHoraFim(LocalTime.parse(horaFimInput));
-            dataReserva.validarDataHora();
-            System.out.println("Data e hora da reserva sao validas.");
-            System.out.println("Data informada: " + dataReserva.getDataAlocacao());
-            System.out.println("Horario informado: " + dataReserva.getHoraInicio() + "h  - " + dataReserva.getHoraFim()+"h");
+
+            if (dataReserva.validarDataHora()) {
+                System.out.println("Data e hora da reserva sao validas.");
+                System.out.println("Data informada: " + dataReserva.getDataAlocacao());
+                System.out.println("Horario informado: " + dataReserva.getHoraInicio() + "h  - " + dataReserva.getHoraFim() + "h");
+                //campusController.obterSalasLivres(dataReserva);
+            }
+
         } catch (DateTimeParseException e) {
             System.out.println("Formato de data ou hora invalido. Certifique-se de usar o formato correto.");
         } catch (IllegalArgumentException e) {

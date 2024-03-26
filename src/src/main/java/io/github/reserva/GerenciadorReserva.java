@@ -11,7 +11,11 @@ public class GerenciadorReserva {
 
     private List<Reserva> reservasCampus;
 
-    public GerenciadorReserva(List<Reserva> reservasCampus) {
+    public List<Reserva> getReservasCampus() {
+        return reservasCampus;
+    }
+
+    public void setReservasCampus(List<Reserva> reservasCampus) {
         this.reservasCampus = reservasCampus;
     }
 

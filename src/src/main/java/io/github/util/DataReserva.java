@@ -41,7 +41,7 @@ public class DataReserva {
     public void setHoraFim(LocalTime horaFim) {
         this.horaFim = horaFim;
     }
-    
+
     /*public boolean isDataHoraValida() {
         LocalDate hoje = LocalDate.now();
         LocalTime agora = LocalTime.now();
@@ -56,7 +56,7 @@ public class DataReserva {
 
         return true;
     }*/
-    public void validarDataHora() throws IllegalArgumentException {
+    public boolean validarDataHora() throws IllegalArgumentException {
         LocalDate hoje = LocalDate.now();
         LocalTime agora = LocalTime.now();
 
@@ -74,5 +74,7 @@ public class DataReserva {
         if (horaFim.isBefore(horaInicio)) {
             throw new IllegalArgumentException("A hora de termino deve ser posterior a hora de inicio.");
         }
+
+        return true;
     }
 }

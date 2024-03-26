@@ -16,10 +16,18 @@ import java.util.List;
 
 public class DataSource {
 
+    private static DataSource instance;
     private static List<Campus> campusList = new ArrayList<Campus>();
 
     public DataSource() {
+        initializeDataSource();
+    }
 
+    public static DataSource getInstance() {
+        if (instance == null) {
+            instance = new DataSource();
+        }
+        return instance;
     }
 
     public static List<Campus> getCampusList() {
@@ -27,7 +35,7 @@ public class DataSource {
     }
 
     public static void initializeDataSource() {
-
+        campusList = new ArrayList<>();
         List<SalaReuniao> salasLista1 = List.of(
                 new SalaReuniao(1, 40),
                 new SalaReuniao(2, 40),
@@ -94,9 +102,18 @@ public class DataSource {
                 new Reserva(LocalDate.of(2024, Month.APRIL, 7), LocalTime.of(7, 20), LocalTime.of(9, 00), "Palestra 3", salasLista1.get(2), funcionariosLista1.get(2), null)
         );
 
+        salasLista1.get(0).getReservas().add(reservasLista1.get(0));
+        salasLista1.get(0).getReservas().add(reservasLista1.get(1));
+        salasLista1.get(9).getReservas().add(reservasLista1.get(2));
+        salasLista1.get(9).getReservas().add(reservasLista1.get(3));
+        salasLista1.get(9).getReservas().add(reservasLista1.get(4));
+        salasLista1.get(9).getReservas().add(reservasLista1.get(5));
+        salasLista1.get(1).getReservas().add(reservasLista1.get(6));
+        salasLista1.get(2).getReservas().add(reservasLista1.get(7));
+
         Endereco endereco1 = new Endereco("Dois", "300", "Village do Lago I", "Montes Claros", SiglaEstado.MG);
 
-        Campus campus1 = new Campus("Campus Montes Claros", endereco1, prediosLista1, equipamentosLista1, funcionariosLista1, reservasLista1);
+        Campus campus1 = new Campus("Campus Montes Claros", endereco1, prediosLista1, equipamentosLista1, funcionariosLista1);
         campusList.add(campus1);
 
         List<SalaReuniao> salasLista3 = List.of(
@@ -164,9 +181,18 @@ public class DataSource {
                 new Reserva(LocalDate.of(2024, Month.APRIL, 7), LocalTime.of(7, 20), LocalTime.of(9, 00), "Palestra 3", salasLista3.get(2), funcionariosLista2.get(2), null)
         );
 
+        salasLista3.get(0).getReservas().add(reservasLista2.get(0));
+        salasLista3.get(0).getReservas().add(reservasLista2.get(1));
+        salasLista4.get(9).getReservas().add(reservasLista2.get(2));
+        salasLista4.get(9).getReservas().add(reservasLista2.get(3));
+        salasLista4.get(9).getReservas().add(reservasLista2.get(4));
+        salasLista4.get(9).getReservas().add(reservasLista2.get(5));
+        salasLista3.get(1).getReservas().add(reservasLista2.get(6));
+        salasLista3.get(2).getReservas().add(reservasLista2.get(2));
+
         Endereco endereco2 = new Endereco("Av. Humberto Mallard", "1355", "Santos Dumont", "Pirapora", SiglaEstado.MG);
 
-        Campus campus2 = new Campus("Campus Pirapora", endereco2, prediosLista2, equipamentosLista2, funcionariosLista2, reservasLista2);
+        Campus campus2 = new Campus("Campus Pirapora", endereco2, prediosLista2, equipamentosLista2, funcionariosLista2);
 
         campusList.add(campus2);
     }

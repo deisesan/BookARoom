@@ -1,10 +1,15 @@
 package io.github.entities;
 
+import io.github.reserva.Reserva;
+import java.util.ArrayList;
+import java.util.List;
+
 public class SalaReuniao {
 
     private Integer numero;
     private Integer qtdLugares;
     private Predio predio;
+    private List<Reserva> reservas = new ArrayList<>();
 
     public SalaReuniao() {
 
@@ -39,11 +44,19 @@ public class SalaReuniao {
     public void setPredio(Predio predio) {
         this.predio = predio;
     }
-    //</editor-fold> 
 
+    public List<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(List<Reserva> reservas) {
+        this.reservas = reservas;
+    }
+    //</editor-fold> 
+    
     @Override
     public String toString() {
         return "SalaReuniao{" + "numero=" + numero + ", qtdLugares=" + qtdLugares + ", predio=" + predio.getNome() + '}';
     }
-    
+
 }
