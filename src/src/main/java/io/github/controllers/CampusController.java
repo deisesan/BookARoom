@@ -1,9 +1,11 @@
 package io.github.controllers;
 
 import io.github.entities.Campus;
+import io.github.entities.SalaReuniao;
 import io.github.enums.Periodo;
 import io.github.reserva.GerenciadorReserva;
 import io.github.reserva.Reserva;
+import io.github.util.DataReserva;
 import java.util.List;
 
 public class CampusController {
@@ -41,6 +43,11 @@ public class CampusController {
             default:
                 throw new IllegalArgumentException("Período inválido: " + periodo);
         }
+    }
+
+    public List<SalaReuniao> obterSalasLivres(DataReserva dataReserva) {
+
+        return null;
     }
 
 }

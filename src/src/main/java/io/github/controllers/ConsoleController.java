@@ -3,6 +3,10 @@ package io.github.controllers;
 import io.github.entities.Campus;
 import io.github.enums.Periodo;
 import io.github.reserva.Reserva;
+import io.github.util.DataReserva;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -65,7 +69,6 @@ public class ConsoleController {
             } catch (InputMismatchException e) {
                 this.sc.nextLine();
                 System.out.println("Por favor, informe uma opcao valida.");
-            
 
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
@@ -83,6 +86,8 @@ public class ConsoleController {
             opcao = this.sc.nextLine();
             if (opcao.equals("0")) {
                 break;
+            } else if (opcao.equals("1")) {
+                this.menuRealizarReserva();
             } else if (opcao.equals("2")) {
                 this.menuVisualizarReservas();
             }
@@ -104,6 +109,33 @@ public class ConsoleController {
         System.out.println("3 - Visualizar reservas do mes.");
         System.out.println("0 - Retornar menu principal.");
 
+    }
+
+    private void menuRealizarReserva() {
+
+        DataReserva dataReserva = new DataReserva();
+        System.out.println("Para realizar reserva informe dados a seguir.");
+        System.out.println("Informe data que deseja realizar reserva no formato (YYYY-MM-DD): ");
+        String dataInput = this.sc.nextLine();
+        System.out.println("Informe hora de inicio no formato (HH:MM): ");
+        String horaInicioInput = this.sc.nextLine();
+        System.out.println("Informe hora de fim no formato (HH:MM): ");
+        String horaFimInput = this.sc.nextLine();
+
+        try {
+            dataReserva.setDataAlocacao(LocalDate.parse(dataInput));
+            dataReserva.setHoraInicio(LocalTime.parse(horaInicioInput));
+            dataReserva.setHoraFim(LocalTime.parse(horaFimInput));
+            dataReserva.validarDataHora();
+            System.out.println("Data e hora da reserva sao validas.");
+            System.out.println("Data informada: " + dataReserva.getDataAlocacao());
+            System.out.println("Horario informado: " + dataReserva.getHoraInicio() + "h  - " + dataReserva.getHoraFim()+"h");
+        } catch (DateTimeParseException e) {
+            System.out.println("Formato de data ou hora invalido. Certifique-se de usar o formato correto.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+        /*Continuar aqui*/
     }
 
     private void menuVisualizarReservas() {
