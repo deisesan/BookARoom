@@ -9,6 +9,9 @@ Projeto desenvolvido como atividade avaliativa em Análise e Projeto de Sistemas
 - [Diagrama de sequência - UC02]()
 - [Diagrama de sequência - UC03]()
 
+### Siglas:
+* UC → Caso de Uso
+
 ---
 
 ![Diagrama Classe](https://github.com/deisesan/BookARoom/assets/60986602/5a970715-c999-4018-865b-9b01283a0b81)
