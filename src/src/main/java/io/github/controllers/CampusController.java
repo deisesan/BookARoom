@@ -1,11 +1,14 @@
 package io.github.controllers;
 
 import io.github.entities.Campus;
+import io.github.entities.Equipamento;
+import io.github.entities.Funcionario;
 import io.github.entities.Predio;
 import io.github.entities.SalaReuniao;
 import io.github.enums.Periodo;
 import io.github.reserva.GerenciadorReserva;
 import io.github.reserva.Reserva;
+import io.github.util.DataReserva;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,32 +73,91 @@ public class CampusController {
         }
     }
 
-    /* public List<SalaReuniao> obterSalasLivres(DataReserva dataReserva) {
+    public List<SalaReuniao> obterSalasLivres(DataReserva dataReserva) {
         List<SalaReuniao> salasLivres = new ArrayList<>();
 
-        // Iterar sobre todas as salas disponíveis no campus
         for (Predio predio : campus.getPredios()) {
             for (SalaReuniao sala : predio.getSalas()) {
-                // Verificar se a sala está livre na data e horário especificados
                 boolean salaLivre = true;
-                for (Reserva reserva : sala.getReservas().) {
-                    // Verificar se a reserva está na mesma data da reserva fornecida
-                    if (reserva.getDataAlocacao().isEqual(dataReserva.getDataAlocacao())) {
-                        // Verificar se há conflito de horário
-                        if (dataReserva.getHoraFim().isAfter(reserva.getHoraInicio()) && dataReserva.getHoraInicio().isBefore(reserva.getHoraFim())) {
-                            // Se houver conflito de horário, a sala não está livre
-                            salaLivre = false;
-                            break;
+                // Verifica se a lista de reservas da sala é nula ou vazia
+                if (sala.getReservas().isEmpty()) {
+                    salasLivres.add(sala);
+                } else {
+                    for (Reserva reserva : sala.getReservas()) {
+                        // Verifica se a reserva é para o mesmo dia da data de reserva informada
+                        if (reserva.getDataAlocacao().equals(dataReserva.getDataAlocacao())) {
+                            // Verifica os horários das reservas
+                            // Casos de conflito de horário
+                            if (reserva.getAtiva()
+                                    && (dataReserva.getHoraInicio().isBefore(reserva.getHoraFim())
+                                    && dataReserva.getHoraFim().isAfter(reserva.getHoraInicio()))) {
+                                salaLivre = false;
+                                break;
+                            }
                         }
                     }
                 }
-                // Se a sala estiver livre, adicioná-la à lista de salas livres
-                if (salaLivre) {
+
+                // Se a sala ainda estiver livre após a verificação das reservas, adicionar à lista de salas livres
+                // Se a sala já estiver na lista, não adiciona de novo
+                if (salaLivre && !salasLivres.contains(sala)) {
                     salasLivres.add(sala);
                 }
             }
         }
 
         return salasLivres;
-    }*/
+    }
+
+    public List<Equipamento> obterEquipamentosDisponiveis(DataReserva dataReserva) {
+        List<Equipamento> equipamentosDisponiveis = new ArrayList<>();
+        List<Reserva> reservasCampus = this.gerenciadorReserva.getReservasCampus();
+
+        for (Equipamento equipamento : this.campus.getEquipamentos()) {
+            boolean equipamentoLivre = true;
+
+            for (Reserva reserva : reservasCampus) {
+                // Verifica se a reserva é para a mesma data
+                if (reserva.getDataAlocacao().equals(dataReserva.getDataAlocacao())) {
+                    // Verifica se a lista de equipamentos não é nula e se o equipamento está presente nessa reserva
+                    if (reserva.getEquipamentos() != null && reserva.getEquipamentos().contains(equipamento)) {
+                        // Se a reserva estiver ativa e houver sobreposição de horário com a reserva atual
+                        // o equipamento não está disponível
+                        if (reserva.getAtiva()
+                                && dataReserva.getHoraInicio().isBefore(reserva.getHoraFim())
+                                && dataReserva.getHoraFim().isAfter(reserva.getHoraInicio())) {
+                            
+                            equipamentoLivre = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Se o equipamento estiver livre após verificar todas as reservas
+            if (equipamentoLivre) {
+                equipamentosDisponiveis.add(equipamento);
+            }
+        }
+
+        return equipamentosDisponiveis;
+    }
+
+    public Reserva reservarSala(DataReserva dataReserva, String assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
+
+        Reserva reserva = this.gerenciadorReserva.criarReserva(dataReserva, assunto, sala, funcionario, equipamentos);
+
+        for (Predio predio : this.campus.getPredios()) {
+            for (SalaReuniao salaReuniao : predio.getSalas()) {
+                if (salaReuniao.equals(sala)) {
+                    salaReuniao.getReservas().add(reserva);
+                }
+
+            }
+
+        }
+
+        return reserva;
+    }
+
 }

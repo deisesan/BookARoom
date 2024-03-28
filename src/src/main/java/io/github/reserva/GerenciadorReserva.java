@@ -1,5 +1,9 @@
 package io.github.reserva;
 
+import io.github.entities.Equipamento;
+import io.github.entities.Funcionario;
+import io.github.entities.SalaReuniao;
+import io.github.util.DataReserva;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -64,4 +68,34 @@ public class GerenciadorReserva {
 
         return reservasDoMes;
     }
+
+    public Reserva criarReserva(DataReserva dataReserva, String assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
+     
+        if (dataReserva == null) {
+            throw new NullPointerException("O objeto DataReserva não pode ser nulo!");
+        }
+
+        if (assunto == null || assunto.isEmpty()) {
+            throw new IllegalArgumentException("O assunto da reserva não pode ser nulo ou vazio!");
+        }
+
+        if (sala == null) {
+            throw new NullPointerException("A sala não pode ser nula!");
+        }
+
+        if (funcionario == null) {
+            throw new NullPointerException("O funcionário não pode ser nulo!");
+        }
+
+        if (equipamentos == null) {
+            throw new NullPointerException("A lista de equipamentos não pode ser nula!");
+        }
+
+        Reserva reserva = new Reserva(dataReserva.getDataAlocacao(), dataReserva.getHoraInicio(), dataReserva.getHoraFim(), assunto, sala, funcionario, equipamentos);
+
+        this.reservasCampus.add(reserva);
+
+        return reserva;
+    }
+
 }

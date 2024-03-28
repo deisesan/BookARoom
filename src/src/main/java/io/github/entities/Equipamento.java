@@ -31,4 +31,9 @@ public class Equipamento {
     }
     //</editor-fold>
 
+    @Override
+    public String toString() {
+        return "Equipamento{" + "nome=" + nome + ", patrimonio=" + patrimonio + '}';
+    }
+
 }
