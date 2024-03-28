@@ -68,7 +68,7 @@ public class DataSource {
         }
 
         List<Funcionario> funcionariosLista1 = List.of(
-                new Funcionario("Walter White", "Professor(a)", "Educação"),
+                new Funcionario("Nome Qualquer", "Professor(a)", "Educação"),
                 new Funcionario("Jennifer Honey", "Professor(a)", "Educação"),
                 new Funcionario("Charles Xavier", "Professor(a)", "Educação"),
                 new Funcionario("Minerva McGonagall", "Professor(a)", "Educação")
@@ -88,7 +88,6 @@ public class DataSource {
                 new Reserva(LocalDate.of(2024, Month.MARCH, 29), LocalTime.of(13, 20), LocalTime.of(15, 00), "Palestra 1", salasLista1.get(1), funcionariosLista1.get(1), null),
                 new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista1.get(2), funcionariosLista1.get(2), List.of(equipamentosLista1.get(0))),
                 new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista1.get(3), funcionariosLista1.get(3), List.of(equipamentosLista1.get(1))),
-                
                 new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista2.get(0), funcionariosLista1.get(0), List.of(equipamentosLista1.get(5))),
                 new Reserva(LocalDate.of(2024, Month.MARCH, 29), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista2.get(1), funcionariosLista1.get(1), null),
                 new Reserva(LocalDate.of(2024, Month.APRIL, 1), LocalTime.of(9, 00), LocalTime.of(10, 50), "Palestra 2", salasLista2.get(2), funcionariosLista1.get(2), null),
@@ -108,6 +107,12 @@ public class DataSource {
         Endereco endereco1 = new Endereco("Dois", "300", "Village do Lago I", "Montes Claros", SiglaEstado.MG);
 
         Campus campus1 = new Campus("Campus Montes Claros", endereco1, prediosLista1, equipamentosLista1, funcionariosLista1);
+
+        funcionariosLista1.get(0).setCampus(campus1);
+        funcionariosLista1.get(1).setCampus(campus1);
+        funcionariosLista1.get(2).setCampus(campus1);
+        funcionariosLista1.get(3).setCampus(campus1);
+
         campusList.add(campus1);
 
         List<SalaReuniao> salasLista3 = List.of(
@@ -180,6 +185,11 @@ public class DataSource {
         Endereco endereco2 = new Endereco("Av. Humberto Mallard", "1355", "Santos Dumont", "Pirapora", SiglaEstado.MG);
 
         Campus campus2 = new Campus("Campus Pirapora", endereco2, prediosLista2, equipamentosLista2, funcionariosLista2);
+
+        funcionariosLista2.get(0).setCampus(campus2);
+        funcionariosLista2.get(1).setCampus(campus2);
+        funcionariosLista2.get(2).setCampus(campus2);
+        funcionariosLista2.get(3).setCampus(campus2);
 
         campusList.add(campus2);
     }

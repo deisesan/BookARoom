@@ -10,96 +10,62 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ConsoleController {
 
-    private CampusController campusController;
-    private Scanner sc;
+    private final CampusController campusController;
+    private final Scanner sc;
+    private final Funcionario funcionarioLogado;
 
     public ConsoleController(CampusController campusController) {
         this.campusController = campusController;
         this.sc = new Scanner(System.in);
+        // Mudar Funcionário
+        this.funcionarioLogado = campusController.getCampusLista().get(0).getFuncionarios().get(0);
     }
 
     public void iniciar() {
         try {
-            String finalizarSessao = "n";
+            String opcao;
             System.out.println("#######################################################");
-            System.out.println("##################  Bem Vindo(a)!!!  ##################");
+            System.out.println("################### Bem Vindo(a)!!! ###################");
+            this.imprimirUsuario(); // Imprimir informações do usuário logado
+            this.campusController.setCampus(this.funcionarioLogado.getCampus()); // Define o campus do funcionário logado
             while (true) {
-                if (finalizarSessao.equals("n")) {
-                    this.selecionarCampus();
-                    this.menuPrincipal();
-                } else {
+                this.opcoesMenuPrincipal();
+                System.out.println("--> Informe opcao: ");
+                opcao = this.sc.nextLine();
+                if (opcao.equals("0")) {
                     break;
+                } else if (opcao.equals("1")) {
+                    this.menuRealizarReserva();
+                } else if (opcao.equals("2")) {
+                    this.menuVisualizarReservas();
                 }
-                System.out.println("--> Finalizar sessao? [s/n]");
-                finalizarSessao = this.sc.nextLine();
             }
 
             System.out.println("################  Sessao finalizada.  #################");
             System.out.println("#######################################################");
         } catch (Exception e) {
-            System.out.println("Ocorreu um erro durante a execução:" + e.getLocalizedMessage());
+            System.out.println("Ocorreu um erro durante a execução: " + e.getLocalizedMessage());
         }
     }
 
-    private void selecionarCampus() {
-        int opcao;
-        int i = 0;
-
-        System.out.println("Selecione campus que deseja realizar reserva: ");
-        this.imprimirLista(campusController.getCampusLista());
-
-        while (true) {
-            try {
-                System.out.println("--> Informe campus: ");
-                opcao = this.sc.nextInt();
-
-                if (opcao < 0 || opcao >= campusController.getCampusLista().size()) {
-                    throw new IllegalArgumentException("Opcao invalida.");
-                } else {
-                    campusController.setCampus(campusController.getCampusLista().get(opcao));
-                    System.out.println("Campus Selecionado: " + campusController.getCampus().getNome());
-                    break;
-                }
-            } catch (InputMismatchException e) {
-                this.sc.nextLine();
-                System.out.println("Por favor, informe uma opcao valida.");
-
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private void menuPrincipal() {
-
-        String opcao;
-        this.sc.nextLine();  //não excluir
-        while (true) {
-            this.opcoesMenuPrincipal();
-            System.out.println("--> Informe opcao: ");
-            opcao = this.sc.nextLine();
-            if (opcao.equals("0")) {
-                break;
-            } else if (opcao.equals("1")) {
-                this.menuRealizarReserva();
-            } else if (opcao.equals("2")) {
-                this.menuVisualizarReservas();
-            }
-        }
+    private void imprimirUsuario() {
+        System.out.println("");
+        System.out.println("Funcionario Logado: " + this.funcionarioLogado.getNome());
+        System.out.println("Funcionario do Campus: " + this.funcionarioLogado.getCampus().getNome());
+        System.out.println("");
     }
 
     private void opcoesMenuPrincipal() {
         System.out.println("Seleciona opcao desejada: ");
         System.out.println("1 - Reservar Sala.");
         System.out.println("2 - Visualizar Ocupacao das salas.");
-        System.out.println("0 - Sair de menu principal.");
-
+        System.out.println("0 - Finalizar Sessao.");
     }
 
     private void opcoesMenuVisualizarReservas() {
@@ -113,12 +79,12 @@ public class ConsoleController {
 
     private void menuRealizarReserva() {
         DataReserva dataReserva = new DataReserva();
-        System.out.println("Para realizar reserva informe dados a seguir.");
-        System.out.println("--> Informe data que deseja realizar reserva no formato (YYYY-MM-DD): ");
+        System.out.println("Para realizar reserva, informe os dados a seguir.");
+        System.out.println("--> Informe a data que deseja realizar a reserva no formato (YYYY-MM-DD): ");
         String dataInput = this.sc.nextLine();
-        System.out.println("--> Informe hora de inicio no formato (HH:MM): ");
+        System.out.println("--> Informe a hora de início no formato (HH:MM): ");
         String horaInicioInput = this.sc.nextLine();
-        System.out.println("--> Informe hora de fim no formato (HH:MM): ");
+        System.out.println("--> Informe a hora de fim no formato (HH:MM): ");
         String horaFimInput = this.sc.nextLine();
 
         try {
@@ -127,62 +93,49 @@ public class ConsoleController {
             dataReserva.setHoraFim(LocalTime.parse(horaFimInput));
 
             if (dataReserva.validarDataHora()) {
-                System.out.println("Data e hora da reserva sao validas.");
+                System.out.println("Data e hora da reserva sao válidas.");
                 System.out.println("Data informada: " + dataReserva.getDataAlocacao());
                 System.out.println("Horario informado: " + dataReserva.getHoraInicio() + "h  - " + dataReserva.getHoraFim() + "h");
                 List<SalaReuniao> salasLivres = campusController.obterSalasLivres(dataReserva);
 
-                // Verificar se a lista de salas livres está nula
-                if (salasLivres == null) {
-                    throw new NullPointerException("Nao ha salas disponiveis para reserva em data e horario informado!!!");
+                // Verificar se a lista de salas livres está vazia
+                if (salasLivres.isEmpty()) {
+                    throw new NullPointerException("Nao ha salas disponíveis para reserva na data e horario informados!!!");
                 }
 
-                System.out.println("Salas disponiveis para reserva: ");
+                System.out.println("Salas disponíveis para reserva: ");
                 imprimirLista(salasLivres);
-                System.out.println("--> Informe numero de sala que deseja realizar reserva: ");
+                System.out.println("--> Informe o numero da sala que deseja reservar: ");
                 int numSala = this.sc.nextInt();
 
-                this.sc.nextLine();  //não excluir
+                this.sc.nextLine();  // Limpar o buffer de entrada
 
                 // Verificar se o número da sala é válido
                 if (numSala >= 0 && numSala < salasLivres.size()) {
                     SalaReuniao salaSelecionada = salasLivres.get(numSala);
                     System.out.println("Sala selecionada: " + salaSelecionada.toString());
-                    System.out.println("--> Lista de Funcionarios: ");
-                    this.imprimirLista(campusController.getCampus().getFuncionarios());
-                    System.out.println("--> Informe funcionario a qual sera criada a reserva: ");
-                    int numFuncionario = this.sc.nextInt();
 
-                    this.sc.nextLine();  //não excluir
+                    System.out.println("--> Informe o assunto da reserva: ");
+                    String assunto = this.sc.nextLine();
 
-                    if (numFuncionario >= 0 && numFuncionario < campusController.getCampus().getFuncionarios().size()) {
-                        Funcionario funcionarioSelecionado = campusController.getCampus().getFuncionarios().get(numFuncionario);
-                        System.out.println("Funcionario selecionado: " + funcionarioSelecionado.toString());
+                    if (assunto == null || assunto.isEmpty()) {
+                        throw new IllegalArgumentException("O assunto da reserva nao pode ser vazio!");
+                    }
 
-                        System.out.println("--> Informe assunto de reserva: ");
-                        String assunto = this.sc.nextLine();
-
-                        if (assunto == null || assunto.isEmpty()) {
-                            throw new IllegalArgumentException("Assunto da reserva nao pode ser vazio!");
-                        }
-
-                        System.out.println("--> Deseja adicionar equipamentos a reserva: (s/n)");
-                        String adicionarEquipamentos = this.sc.nextLine();
-                        List<Equipamento> equipamentosSelecionados = null;
-                        if (adicionarEquipamentos.equals("s")) {
-
-                            equipamentosSelecionados = this.menuAdcionarEquipamentos(dataReserva);
-                        }
-
-                        Reserva reservaCriada = campusController.reservarSala(dataReserva, assunto, salaSelecionada, funcionarioSelecionado, equipamentosSelecionados);
-
-                        if (reservaCriada != null) {
-                            System.out.println("Reserva realizada com sucesso!!!");
-                            this.imprimirReserva(reservaCriada);
-                        }
-
+                    System.out.println("--> Deseja adicionar equipamentos a reserva? (s/n)");
+                    String adicionarEquipamentos = this.sc.nextLine();
+                    List<Equipamento> equipamentosSelecionados = null;
+                    if (adicionarEquipamentos.equals("s")) {
+                        equipamentosSelecionados = this.menuAdcionarEquipamentos(dataReserva);
                     } else {
-                        throw new IllegalArgumentException("Numero de funcionario invalido!");
+                        equipamentosSelecionados = new ArrayList<>();// Atribuindo uma lista vazia
+                    }
+
+                    Reserva reservaCriada = campusController.reservarSala(dataReserva, assunto, salaSelecionada, this.funcionarioLogado, equipamentosSelecionados);
+
+                    if (reservaCriada != null) {
+                        System.out.println("Reserva realizada com sucesso!!!");
+                        this.imprimirReserva(reservaCriada);
                     }
 
                 } else {
@@ -191,7 +144,7 @@ public class ConsoleController {
 
             }
         } catch (DateTimeParseException e) {
-            System.out.println("Formato de data ou hora invalido. Certifique-se de usar o formato correto.");
+            System.out.println("Formato de data ou hora inválido. Certifique-se de usar o formato correto.");
         } catch (IllegalArgumentException e) {
             System.out.println("Erro: " + e.getMessage());
         } catch (NullPointerException e) {
@@ -202,50 +155,50 @@ public class ConsoleController {
     private void imprimirReserva(Reserva reserva) {
         // Verificar se a reserva é nula
         if (reserva == null) {
-            throw new NullPointerException("A reserva não pode ser nula!");
+            throw new NullPointerException("A reserva nao pode ser nula!");
         }
 
         System.out.println("--------------- Dados de reserva ---------------");
         if (reserva.getDataAlocacao() != null) {
             System.out.println("--> Data: " + reserva.getDataAlocacao());
         } else {
-            System.out.println("--> Data: [Data não especificada]");
+            System.out.println("--> Data: [Data nao especificada]");
         }
 
         if (reserva.getHoraInicio() != null) {
             System.out.println("--> Horario de inicio: " + reserva.getHoraInicio());
         } else {
-            System.out.println("--> Horario de inicio: [Horário não especificado]");
+            System.out.println("--> Horario de inicio: [Horario nao especificado]");
         }
 
         if (reserva.getHoraFim() != null) {
             System.out.println("--> Horario de fim: " + reserva.getHoraFim());
         } else {
-            System.out.println("--> Horario de fim: [Horário não especificado]");
+            System.out.println("--> Horario de fim: [Horário nao especificado]");
         }
 
         if (reserva.getAssunto() != null && !reserva.getAssunto().isEmpty()) {
             System.out.println("--> Assunto: " + reserva.getAssunto());
         } else {
-            System.out.println("--> Assunto: [Assunto não especificado]");
+            System.out.println("--> Assunto: [Assunto nao especificado]");
         }
 
         if (reserva.getFuncionario() != null && reserva.getFuncionario().getNome() != null) {
             System.out.println("--> Funcionario: " + reserva.getFuncionario().getNome());
         } else {
-            System.out.println("--> Funcionario: [Funcionário não especificado]");
+            System.out.println("--> Funcionario: [Funcionario nao especificado]");
         }
 
         if (reserva.getSala() != null && reserva.getSala().getNumero() != null) {
             System.out.println("--> Sala: " + reserva.getSala().getNumero());
         } else {
-            System.out.println("--> Sala: [Sala não especificada]");
+            System.out.println("--> Sala: [Sala nao especificada]");
         }
 
         if (reserva.getSala() != null && reserva.getSala().getPredio() != null && reserva.getSala().getPredio().getNome() != null) {
             System.out.println("--> Predio: " + reserva.getSala().getPredio().getNome());
         } else {
-            System.out.println("--> Predio: [Prédio não especificado]");
+            System.out.println("--> Predio: [Predio nao especificado]");
         }
 
         if (reserva.getEquipamentos() != null && !reserva.getEquipamentos().isEmpty()) {
@@ -304,13 +257,24 @@ public class ConsoleController {
 
     private void visualizarReservasDoDia() {
         try {
-            List<Reserva> reservas = campusController.obterReservasDeCampusPorPeriodo(Periodo.DIA);
+            Map<Boolean, List<Reserva>> reservasDoDiaAgrupadas = campusController.obterReservasDeCampusPorPeriodo(Periodo.DIA);
 
-            if (reservas.isEmpty()) {
-                System.out.println("Não há reservas para o dia de hoje.");
+            if (reservasDoDiaAgrupadas.isEmpty()) {
+                System.out.println("Nao ha reservas para o dia de hoje.");
             } else {
-                System.out.println("Lista de Reservas do Dia: ");
-                imprimirLista(reservas);
+                System.out.println("-- > Lista de Reservas do Dia: ");
+                for (Map.Entry<Boolean, List<Reserva>> entry : reservasDoDiaAgrupadas.entrySet()) {
+                    boolean ativa = entry.getKey();
+                    List<Reserva> reservas = entry.getValue();
+
+                    if (ativa) {
+                        System.out.println(" - Reservas ativas:");
+                    } else {
+                        System.out.println(" - Reservas inativas:");
+                    }
+
+                    this.imprimirLista(reservas);
+                }
             }
         } catch (NullPointerException e) {
             System.out.println("Lista de reservas de campus está nula.");
@@ -319,13 +283,24 @@ public class ConsoleController {
 
     private void visualizarReservasDaSemana() {
         try {
-            List<Reserva> reservas = campusController.obterReservasDeCampusPorPeriodo(Periodo.SEMANA);
+            Map<Boolean, List<Reserva>> reservasDaSemanaAgrupadas = campusController.obterReservasDeCampusPorPeriodo(Periodo.SEMANA);
 
-            if (reservas.isEmpty()) {
-                System.out.println("Não há reservas nesta semana.");
+            if (reservasDaSemanaAgrupadas.isEmpty()) {
+                System.out.println("Nao ha reservas para nesta semana.");
             } else {
-                System.out.println("Lista de Reservas da Semana: ");
-                imprimirLista(reservas);
+                System.out.println("-- > Lista de Reservas da Semana: ");
+                for (Map.Entry<Boolean, List<Reserva>> entry : reservasDaSemanaAgrupadas.entrySet()) {
+                    boolean ativa = entry.getKey();
+                    List<Reserva> reservas = entry.getValue();
+
+                    if (ativa) {
+                        System.out.println(" - Reservas ativas:");
+                    } else {
+                        System.out.println(" - Reservas inativas:");
+                    }
+
+                    this.imprimirLista(reservas);
+                }
             }
         } catch (NullPointerException e) {
             System.out.println("Lista de reservas de campus está nula.");
@@ -334,13 +309,24 @@ public class ConsoleController {
 
     private void visualizarReservasDoMes() {
         try {
-            List<Reserva> reservas = campusController.obterReservasDeCampusPorPeriodo(Periodo.MES);
+            Map<Boolean, List<Reserva>> reservasDoMesAgrupadas = campusController.obterReservasDeCampusPorPeriodo(Periodo.MES);
 
-            if (reservas.isEmpty()) {
-                System.out.println("Não há reservas para este mes.");
+            if (reservasDoMesAgrupadas.isEmpty()) {
+                System.out.println("Nao ha reservas para este mes.");
             } else {
-                System.out.println("Lista de Reservas do Mês: ");
-                imprimirLista(reservas);
+                System.out.println("-- > Lista de Reservas do Mes: ");
+                for (Map.Entry<Boolean, List<Reserva>> entry : reservasDoMesAgrupadas.entrySet()) {
+                    boolean ativa = entry.getKey();
+                    List<Reserva> reservas = entry.getValue();
+
+                    if (ativa) {
+                        System.out.println(" - Reservas ativas:");
+                    } else {
+                        System.out.println(" - Reservas inativas:");
+                    }
+
+                    this.imprimirLista(reservas);
+                }
             }
         } catch (NullPointerException e) {
             System.out.println("Lista de reservas de campus está nula.");
@@ -348,10 +334,15 @@ public class ConsoleController {
     }
 
     private <T> void imprimirLista(List<T> lista) {
-        int i = 0;
-        for (T item : lista) {
-            System.out.println("[ " + i + " ]" + " - " + item.toString());
-            i++;
+
+        if (lista == null || lista.isEmpty()) {
+            System.out.println("LISTA VAZIA.");
+        } else {
+            int i = 0;
+            for (T item : lista) {
+                System.out.println("[ " + i + " ]" + " - " + item.toString());
+                i++;
+            }
         }
     }
 

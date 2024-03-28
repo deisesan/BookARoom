@@ -11,6 +11,7 @@ import io.github.reserva.Reserva;
 import io.github.util.DataReserva;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CampusController {
 
@@ -57,18 +58,19 @@ public class CampusController {
 
     }
 
-    public List<Reserva> obterReservasDeCampusPorPeriodo(Periodo periodo) {
-        //List<Reserva> reservas = campus.getReservas();
-        //GerenciadorReserva gerenciadorReserva = new GerenciadorReserva(reservas);
-
+    public Map<Boolean, List<Reserva>> obterReservasDeCampusPorPeriodo(Periodo periodo) {
+    
         switch (periodo) {
-            case DIA:
-                return gerenciadorReserva.retornarListaDeReservasDoDia();
-            case SEMANA:
-                return gerenciadorReserva.retornarListaDeReservasDaSemana();
-            case MES:
-                return gerenciadorReserva.retornarListaDeReservasDoMes();
-            default:
+            case DIA -> {
+                return gerenciadorReserva.retornarReservasDoDiaAgrupadas();
+            }
+            case SEMANA -> {
+                return gerenciadorReserva.retornarReservasDaSemanaAgrupadas();
+            }
+            case MES -> {
+                return gerenciadorReserva.retornarReservasDoMesAgrupadas();
+            }
+            default ->
                 throw new IllegalArgumentException("Período inválido: " + periodo);
         }
     }
@@ -126,7 +128,7 @@ public class CampusController {
                         if (reserva.getAtiva()
                                 && dataReserva.getHoraInicio().isBefore(reserva.getHoraFim())
                                 && dataReserva.getHoraFim().isAfter(reserva.getHoraInicio())) {
-                            
+
                             equipamentoLivre = false;
                             break;
                         }
