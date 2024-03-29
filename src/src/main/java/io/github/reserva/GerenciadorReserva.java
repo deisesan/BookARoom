@@ -3,6 +3,7 @@ package io.github.reserva;
 import io.github.entities.Equipamento;
 import io.github.entities.Funcionario;
 import io.github.entities.SalaReuniao;
+import io.github.enums.Assunto;
 import io.github.util.DataReserva;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -54,7 +55,7 @@ public class GerenciadorReserva {
 
         LocalDate hoje = LocalDate.now();
         LocalDate inicioDaSemana = hoje.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-        LocalDate fimDaSemana = inicioDaSemana.plusDays(6);
+        LocalDate fimDaSemana = inicioDaSemana.plusDays(7);
 
         for (Reserva reserva : reservasCampus) {
             LocalDate dataDaReserva = reserva.getDataAlocacao();
@@ -97,58 +98,13 @@ public class GerenciadorReserva {
         return reservasAgrupadas;
     }
 
-//    public List<Reserva> retornarListaDeReservasDoDia() {
-//        List<Reserva> reservasDoDia = new ArrayList<>();
-//
-//        LocalDate hoje = LocalDate.now();
-//
-//        for (Reserva reserva : reservasCampus) {
-//            if (reserva.getDataAlocacao().isEqual(hoje)) {
-//                reservasDoDia.add(reserva);
-//            }
-//        }
-//
-//        return reservasDoDia;
-//    }
-//
-//    public List<Reserva> retornarListaDeReservasDaSemana() {
-//        List<Reserva> reservasDaSemana = new ArrayList<>();
-//
-//        LocalDate hoje = LocalDate.now();
-//        LocalDate inicioDaSemana = hoje.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY));
-//        LocalDate fimDaSemana = inicioDaSemana.plusDays(6);
-//
-//        for (Reserva reserva : reservasCampus) {
-//            LocalDate dataDaReserva = reserva.getDataAlocacao();
-//            if (dataDaReserva.isEqual(inicioDaSemana) || (dataDaReserva.isAfter(inicioDaSemana) && dataDaReserva.isBefore(fimDaSemana))) {
-//                reservasDaSemana.add(reserva);
-//            }
-//        }
-//
-//        return reservasDaSemana;
-//    }
-//
-//    public List<Reserva> retornarListaDeReservasDoMes() {
-//        List<Reserva> reservasDoMes = new ArrayList<>();
-//
-//        YearMonth mesAtual = YearMonth.now();
-//
-//        for (Reserva reserva : reservasCampus) {
-//            YearMonth anoMesReserva = YearMonth.from(reserva.getDataAlocacao());
-//            if (anoMesReserva.equals(mesAtual)) {
-//                reservasDoMes.add(reserva);
-//            }
-//        }
-//
-//        return reservasDoMes;
-//    }
-    public Reserva criarReserva(DataReserva dataReserva, String assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
+    public Reserva criarReserva(DataReserva dataReserva, Assunto assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
 
         if (dataReserva == null) {
             throw new NullPointerException("O objeto DataReserva não pode ser nulo!");
         }
 
-        if (assunto == null || assunto.isEmpty()) {
+        if (assunto == null || assunto.getDescription().isEmpty()) {
             throw new IllegalArgumentException("O assunto da reserva não pode ser nulo ou vazio!");
         }
 
@@ -170,5 +126,5 @@ public class GerenciadorReserva {
 
         return reserva;
     }
-
+    
 }

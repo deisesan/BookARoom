@@ -3,6 +3,7 @@ package io.github.controllers;
 import io.github.entities.Equipamento;
 import io.github.entities.Funcionario;
 import io.github.entities.SalaReuniao;
+import io.github.enums.Assunto;
 import io.github.enums.Periodo;
 import io.github.reserva.Reserva;
 import io.github.util.DataReserva;
@@ -36,7 +37,7 @@ public class ConsoleController {
             this.campusController.setCampus(this.funcionarioLogado.getCampus()); // Define o campus do funcionário logado
             while (true) {
                 this.opcoesMenuPrincipal();
-                System.out.println("--> Informe opcao: ");
+                System.out.print("--> Informe opcao: ");
                 opcao = this.sc.nextLine();
                 if (opcao.equals("0")) {
                     break;
@@ -77,12 +78,30 @@ public class ConsoleController {
 
     }
 
+    private Assunto escolherAssunto() {
+        while (true) {
+            for (Assunto assunto : Assunto.values()) {
+                System.out.println("[ " + (assunto.ordinal() + 1) + " ] - " + assunto.getDescription());
+            }
+
+            System.out.print("--> Informe o numero correspondente ao assunto desejado: ");
+            int opcaoAssunto = this.sc.nextInt();
+
+            // Verifica se a opção está dentro do intervalo válido
+            if (opcaoAssunto >= 1 && opcaoAssunto <= Assunto.values().length) {
+                return Assunto.values()[opcaoAssunto - 1];
+            } else {
+                System.out.println("Opcao invalida. Por favor, escolha uma opcao valida.");
+            }
+        }
+    }
+
     private void menuRealizarReserva() {
         DataReserva dataReserva = new DataReserva();
         System.out.println("Para realizar reserva, informe os dados a seguir.");
         System.out.println("--> Informe a data que deseja realizar a reserva no formato (YYYY-MM-DD): ");
         String dataInput = this.sc.nextLine();
-        System.out.println("--> Informe a hora de início no formato (HH:MM): ");
+        System.out.println("--> Informe a hora de inicio no formato (HH:MM): ");
         String horaInicioInput = this.sc.nextLine();
         System.out.println("--> Informe a hora de fim no formato (HH:MM): ");
         String horaFimInput = this.sc.nextLine();
@@ -93,56 +112,66 @@ public class ConsoleController {
             dataReserva.setHoraFim(LocalTime.parse(horaFimInput));
 
             if (dataReserva.validarDataHora()) {
-                System.out.println("Data e hora da reserva sao válidas.");
                 System.out.println("Data informada: " + dataReserva.getDataAlocacao());
                 System.out.println("Horario informado: " + dataReserva.getHoraInicio() + "h  - " + dataReserva.getHoraFim() + "h");
-                List<SalaReuniao> salasLivres = campusController.obterSalasLivres(dataReserva);
 
-                // Verificar se a lista de salas livres está vazia
-                if (salasLivres.isEmpty()) {
-                    throw new NullPointerException("Nao ha salas disponíveis para reserva na data e horario informados!!!");
-                }
-
-                System.out.println("Salas disponíveis para reserva: ");
-                imprimirLista(salasLivres);
-                System.out.println("--> Informe o numero da sala que deseja reservar: ");
-                int numSala = this.sc.nextInt();
-
-                this.sc.nextLine();  // Limpar o buffer de entrada
-
-                // Verificar se o número da sala é válido
-                if (numSala >= 0 && numSala < salasLivres.size()) {
-                    SalaReuniao salaSelecionada = salasLivres.get(numSala);
-                    System.out.println("Sala selecionada: " + salaSelecionada.toString());
+                if (this.campusController.verificarConflitoReservaFuncionario(dataReserva, funcionarioLogado) == false) {
 
                     System.out.println("--> Informe o assunto da reserva: ");
-                    String assunto = this.sc.nextLine();
 
-                    if (assunto == null || assunto.isEmpty()) {
-                        throw new IllegalArgumentException("O assunto da reserva nao pode ser vazio!");
-                    }
+                    Assunto assunto = this.escolherAssunto();
+                    this.sc.nextLine();  // Limpar o buffer de entrada
 
-                    System.out.println("--> Deseja adicionar equipamentos a reserva? (s/n)");
-                    String adicionarEquipamentos = this.sc.nextLine();
-                    List<Equipamento> equipamentosSelecionados = null;
-                    if (adicionarEquipamentos.equals("s")) {
-                        equipamentosSelecionados = this.menuAdcionarEquipamentos(dataReserva);
+                    if (this.campusController.validarReservaParaAula(assunto, dataReserva)) {
+
+                        List<SalaReuniao> salasLivres = campusController.obterSalasLivres(dataReserva);
+
+                        // Verificar se a lista de salas livres está vazia
+                        if (salasLivres.isEmpty()) {
+                            throw new NullPointerException("Nao ha salas disponíveis para reserva na data e horario informados!!!");
+                        }
+
+                        System.out.println("Salas disponiveis para reserva: ");
+                        imprimirLista(salasLivres);
+                        System.out.print("--> Informe o numero da lista correspondente a sala que deseja reservar: ");
+                        int numSala = this.sc.nextInt();
+
+                        this.sc.nextLine();  // Limpar o buffer de entrada
+
+                        // Verificar se o número da sala é válido
+                        if (numSala >= 0 && numSala < salasLivres.size()) {
+                            SalaReuniao salaSelecionada = salasLivres.get(numSala);
+                            System.out.println("Sala selecionada: " + salaSelecionada.toString());
+
+                            System.out.println("--> Deseja adicionar equipamentos a reserva? (s/n)");
+                            String adicionarEquipamentos = this.sc.nextLine();
+                            List<Equipamento> equipamentosSelecionados = null;
+                            if (adicionarEquipamentos.equals("s")) {
+                                equipamentosSelecionados = this.menuAdcionarEquipamentos(dataReserva);
+                            } else {
+                                equipamentosSelecionados = new ArrayList<>();// Atribuindo uma lista vazia
+                            }
+
+                            Reserva reservaCriada = campusController.reservarSala(dataReserva, assunto, salaSelecionada, this.funcionarioLogado, equipamentosSelecionados);
+
+                            if (reservaCriada != null) {
+                                System.out.println("Reserva realizada com sucesso!!!");
+                                this.imprimirReserva(reservaCriada);
+                            }
+
+                        } else {
+                            throw new IllegalArgumentException("Numero de sala invalido!");
+                        }
+
                     } else {
-                        equipamentosSelecionados = new ArrayList<>();// Atribuindo uma lista vazia
+                        System.out.println("\n!!!!!!!!!! ALERTA !!!!!!!!!!\nReservas de salas para reuniao ou palestra nao podem ser feitas entre 7:20h e 18:40h, salas nesse horario sao disponiveis apenas para reserva de aulas.\n");
+
                     }
-
-                    Reserva reservaCriada = campusController.reservarSala(dataReserva, assunto, salaSelecionada, this.funcionarioLogado, equipamentosSelecionados);
-
-                    if (reservaCriada != null) {
-                        System.out.println("Reserva realizada com sucesso!!!");
-                        this.imprimirReserva(reservaCriada);
-                    }
-
                 } else {
-                    throw new IllegalArgumentException("Numero de sala invalido!");
+                    System.out.println("CONFLITO: voce ja possui uma reserva ativa de sala no horario informado.");
                 }
-
             }
+
         } catch (DateTimeParseException e) {
             System.out.println("Formato de data ou hora inválido. Certifique-se de usar o formato correto.");
         } catch (IllegalArgumentException e) {
@@ -177,7 +206,7 @@ public class ConsoleController {
             System.out.println("--> Horario de fim: [Horário nao especificado]");
         }
 
-        if (reserva.getAssunto() != null && !reserva.getAssunto().isEmpty()) {
+        if (reserva.getAssunto() != null && !reserva.getAssunto().getDescription().isEmpty()) {
             System.out.println("--> Assunto: " + reserva.getAssunto());
         } else {
             System.out.println("--> Assunto: [Assunto nao especificado]");
@@ -238,7 +267,7 @@ public class ConsoleController {
 
         while (true) {
             this.opcoesMenuVisualizarReservas();
-            System.out.println("--> Informe opcao: ");
+            System.out.print("--> Informe opcao: ");
             opcao = this.sc.nextLine();
 
             if (opcao.equals("1")) {

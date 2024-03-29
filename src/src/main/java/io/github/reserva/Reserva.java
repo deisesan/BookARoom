@@ -3,6 +3,7 @@ package io.github.reserva;
 import io.github.entities.Equipamento;
 import io.github.entities.Funcionario;
 import io.github.entities.SalaReuniao;
+import io.github.enums.Assunto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -12,7 +13,7 @@ public class Reserva {
     private LocalDate dataAlocacao;
     private LocalTime horaInicio;
     private LocalTime horaFim;
-    private String assunto;
+    private Assunto assunto;
 
     //Atributos das relações
     private SalaReuniao sala;
@@ -24,7 +25,7 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(LocalDate dataAlocacao, LocalTime horaInicio, LocalTime horaFim, String assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
+    public Reserva(LocalDate dataAlocacao, LocalTime horaInicio, LocalTime horaFim, Assunto assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
         this.dataAlocacao = dataAlocacao;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
@@ -59,11 +60,11 @@ public class Reserva {
         this.horaFim = horaFim;
     }
 
-    public String getAssunto() {
+    public Assunto getAssunto() {
         return assunto;
     }
 
-    public void setAssunto(String assunto) {
+    public void setAssunto(Assunto assunto) {
         this.assunto = assunto;
     }
 
@@ -106,7 +107,7 @@ public class Reserva {
 
     @Override
     public String toString() {
-        return "Reserva{" + "dataAlocacao=" + dataAlocacao + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim + ", assunto=" + assunto + ", sala=" + sala + ", funcionario=" + funcionario + ", ativa=" + this.getAtiva() + '}';
+        return "Reserva{" + "dataAlocacao=" + dataAlocacao + ", horaInicio=" + horaInicio + ", horaFim=" + horaFim + ", assunto=" + assunto.getDescription() + ", sala=" + sala + ", funcionario=" + funcionario + ", ativa=" + this.getAtiva() + '}';
     }
 
 }

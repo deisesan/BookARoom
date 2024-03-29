@@ -5,10 +5,12 @@ import io.github.entities.Equipamento;
 import io.github.entities.Funcionario;
 import io.github.entities.Predio;
 import io.github.entities.SalaReuniao;
+import io.github.enums.Assunto;
 import io.github.enums.Periodo;
 import io.github.reserva.GerenciadorReserva;
 import io.github.reserva.Reserva;
 import io.github.util.DataReserva;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +61,7 @@ public class CampusController {
     }
 
     public Map<Boolean, List<Reserva>> obterReservasDeCampusPorPeriodo(Periodo periodo) {
-    
+
         switch (periodo) {
             case DIA -> {
                 return gerenciadorReserva.retornarReservasDoDiaAgrupadas();
@@ -145,7 +147,27 @@ public class CampusController {
         return equipamentosDisponiveis;
     }
 
-    public Reserva reservarSala(DataReserva dataReserva, String assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
+    public boolean verificarConflitoReservaFuncionario(DataReserva dataReserva, Funcionario funcionario) {
+        // Obtém a lista de reservas do campus
+        List<Reserva> reservasCampus = this.gerenciadorReserva.getReservasCampus();
+
+        // Verifica cada reserva
+        for (Reserva reserva : reservasCampus) {
+            // Verifica se a reserva é na mesma data da reserva fornecida e se o funcionário está presente nela
+            if (reserva.getDataAlocacao().isEqual(dataReserva.getDataAlocacao()) && reserva.getFuncionario().equals(funcionario)) {
+                // Se a reserva está ativa e há sobreposição de horário
+                if (reserva.getAtiva() && dataReserva.getHoraInicio().isBefore(reserva.getHoraFim()) && dataReserva.getHoraFim().isAfter(reserva.getHoraInicio())) {
+                    // Há um conflito de reserva
+                    return true;
+                }
+            }
+        }
+
+        // Não há conflito de reserva para o funcionário na data e hora fornecidas
+        return false;
+    }
+
+    public Reserva reservarSala(DataReserva dataReserva, Assunto assunto, SalaReuniao sala, Funcionario funcionario, List<Equipamento> equipamentos) {
 
         Reserva reserva = this.gerenciadorReserva.criarReserva(dataReserva, assunto, sala, funcionario, equipamentos);
 
@@ -160,6 +182,19 @@ public class CampusController {
         }
 
         return reserva;
+    }
+
+    public boolean validarReservaParaAula(Assunto assunto, DataReserva dataReserva) {
+        // Se o assunto não for uma aula e o horário estiver dentro do intervalo restrito,
+        // então não é permitido reservar para aula
+        if (!assunto.equals(Assunto.AULA)
+                && (dataReserva.getHoraInicio().isBefore(LocalTime.of(18, 40))
+                && dataReserva.getHoraFim().isAfter(LocalTime.of(7, 20)))) {
+            return false;
+        }
+
+        // Se não for o caso acima, então a reserva pode ser para aula ou o horário está fora do intervalo restrito
+        return true;
     }
 
 }

@@ -6,6 +6,7 @@ import io.github.entities.Equipamento;
 import io.github.entities.Funcionario;
 import io.github.entities.Predio;
 import io.github.entities.SalaReuniao;
+import io.github.enums.Assunto;
 import io.github.enums.SiglaEstado;
 import io.github.reserva.Reserva;
 import java.time.LocalDate;
@@ -84,14 +85,14 @@ public class DataSource {
         );
 
         List<Reserva> reservasLista1 = List.of(
-                new Reserva(LocalDate.of(2024, Month.MARCH, 29), LocalTime.of(11, 00), LocalTime.of(12, 40), "Reuniao Doscentes", salasLista1.get(0), funcionariosLista1.get(0), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 29), LocalTime.of(13, 20), LocalTime.of(15, 00), "Palestra 1", salasLista1.get(1), funcionariosLista1.get(1), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista1.get(2), funcionariosLista1.get(2), List.of(equipamentosLista1.get(0))),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista1.get(3), funcionariosLista1.get(3), List.of(equipamentosLista1.get(1))),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista2.get(0), funcionariosLista1.get(0), List.of(equipamentosLista1.get(5))),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 29), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao com discentes", salasLista2.get(1), funcionariosLista1.get(1), null),
-                new Reserva(LocalDate.of(2024, Month.APRIL, 1), LocalTime.of(9, 00), LocalTime.of(10, 50), "Palestra 2", salasLista2.get(2), funcionariosLista1.get(2), null),
-                new Reserva(LocalDate.of(2024, Month.APRIL, 2), LocalTime.of(7, 20), LocalTime.of(9, 00), "Palestra 3", salasLista2.get(3), funcionariosLista1.get(3), null)
+                new Reserva(LocalDate.of(2024, Month.MARCH, 27), LocalTime.of(11, 00), LocalTime.of(12, 40), Assunto.AULA, salasLista1.get(0), funcionariosLista1.get(0), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista1.get(1), funcionariosLista1.get(1), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 31), LocalTime.of(11, 00), LocalTime.of(12, 40), Assunto.AULA, salasLista1.get(2), funcionariosLista1.get(2), List.of(equipamentosLista1.get(0))),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 1), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista1.get(3), funcionariosLista1.get(3), List.of(equipamentosLista1.get(1))),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 2), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista2.get(0), funcionariosLista1.get(0), List.of(equipamentosLista1.get(5))),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 3), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista2.get(1), funcionariosLista1.get(1), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 4), LocalTime.of(9, 00), LocalTime.of(10, 50), Assunto.AULA, salasLista2.get(2), funcionariosLista1.get(2), null),
+                new Reserva(LocalDate.of(2024, Month.APRIL, 5), LocalTime.of(7, 20), LocalTime.of(9, 00), Assunto.AULA, salasLista2.get(3), funcionariosLista1.get(3), null)
         );
 
         salasLista1.get(0).getReservas().add(reservasLista1.get(0));
@@ -162,14 +163,14 @@ public class DataSource {
         );
 
         List<Reserva> reservasLista2 = List.of(
-                new Reserva(LocalDate.of(2024, Month.MARCH, 22), LocalTime.of(11, 00), LocalTime.of(12, 40), "Reuniao", salasLista3.get(0), funcionariosLista2.get(0), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 24), LocalTime.of(9, 00), LocalTime.of(11, 00), "Palestra 1", salasLista3.get(1), funcionariosLista2.get(1), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 25), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao", salasLista3.get(2), funcionariosLista2.get(2), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 26), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao", salasLista3.get(3), funcionariosLista2.get(3), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 27), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao", salasLista4.get(0), funcionariosLista2.get(0), null),
-                new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), "Reuniao", salasLista4.get(1), funcionariosLista2.get(1), null),
-                new Reserva(LocalDate.of(2024, Month.APRIL, 6), LocalTime.of(9, 00), LocalTime.of(10, 50), "Palestra 2", salasLista4.get(2), funcionariosLista2.get(2), null),
-                new Reserva(LocalDate.of(2024, Month.APRIL, 7), LocalTime.of(7, 20), LocalTime.of(9, 00), "Palestra 3", salasLista4.get(3), funcionariosLista2.get(3), null)
+                new Reserva(LocalDate.of(2024, Month.MARCH, 22), LocalTime.of(11, 00), LocalTime.of(12, 40), Assunto.AULA, salasLista3.get(0), funcionariosLista2.get(0), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 24), LocalTime.of(9, 00), LocalTime.of(11, 00), Assunto.AULA, salasLista3.get(1), funcionariosLista2.get(1), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 25), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista3.get(2), funcionariosLista2.get(2), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 26), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista3.get(3), funcionariosLista2.get(3), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 27), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista4.get(0), funcionariosLista2.get(0), null),
+                new Reserva(LocalDate.of(2024, Month.MARCH, 28), LocalTime.of(13, 20), LocalTime.of(15, 00), Assunto.AULA, salasLista4.get(1), funcionariosLista2.get(1), null),
+                new Reserva(LocalDate.of(2024, Month.APRIL, 6), LocalTime.of(9, 00), LocalTime.of(10, 50), Assunto.AULA, salasLista4.get(2), funcionariosLista2.get(2), null),
+                new Reserva(LocalDate.of(2024, Month.APRIL, 7), LocalTime.of(7, 20), LocalTime.of(9, 00), Assunto.AULA, salasLista4.get(3), funcionariosLista2.get(3), null)
         );
 
         salasLista3.get(0).getReservas().add(reservasLista2.get(0));
