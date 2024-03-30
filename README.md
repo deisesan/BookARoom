@@ -8,6 +8,7 @@ Projeto desenvolvido como atividade avaliativa em Análise e Projeto de Sistemas
 - [Diagrama de sequência - UC01](doc/Diagrama%20Sequencia-%20UC01.png)
 - [Diagrama de sequência - UC02](doc/Diagrama%20Sequencia-%20UC02.png)
 - [Diagrama de sequência - UC03](doc/Diagrama%20Sequencia-%20UC03.png)
+- [Princípios GRASP](doc/Princípios%20GRASP.pdf)
 
 ### Siglas:
 * UC → Caso de Uso
